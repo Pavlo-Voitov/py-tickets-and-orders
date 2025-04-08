@@ -1,5 +1,5 @@
 from django.db import transaction
-from db.models import Order, Ticket, User
+from db.models import Order, Ticket, User, MovieSession
 from datetime import datetime
 from django.db.models import QuerySet
 
@@ -17,8 +17,9 @@ def create_order(
         order.save()
 
     for ticket_data in tickets:
+        movie_session = MovieSession.objects.get(pk=ticket_data["movie_session"])
         Ticket.objects.create(
-            movie_session_id=ticket_data["movie_session"],
+            movie_session=movie_session,
             order=order,
             row=ticket_data["row"],
             seat=ticket_data["seat"]
